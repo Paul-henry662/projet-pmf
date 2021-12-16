@@ -1,6 +1,8 @@
 package pmf.controller;
 
+
 import pmf.model.*;
+import pmf.view.*;
 
 public class PMFController {
 
@@ -8,15 +10,19 @@ public class PMFController {
 
 	private PMFModel model;
 	private PMFSerial serialConn;
-
+	private PMFView view;
+	
 	/**
 	 * 
+	 * @param view
 	 * @param model
 	 */
-	public PMFController(PMFModel model) {
+	public PMFController(PMFView view, PMFModel model) {
+		this.setView(view);
 		this.setModel(model);
 		this.setSerialConn(new PMFSerial(PORT_NAME));
 	}
+
 
 	public PMFModel getModel() {
 		return this.model;
@@ -47,6 +53,14 @@ public class PMFController {
 		this.getModel().addObserver(this);
 		this.getSerialConn().connect();
 		
+		this.getView().getFrame().addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    	close();
+		    }
+		});
+		this.getView().start();
+		
 		System.out.println("=== Ouverture de la connexion sur le port " + PORT_NAME + " ===");
 	}
 
@@ -59,7 +73,26 @@ public class PMFController {
 	}
 
 	public void update() {
-		System.out.println(this.model.getFridge() + "\n");
+	}
+
+	public PMFView getView() {
+		return this.view;
+	}
+
+	/**
+	 * 
+	 * @param view
+	 */
+	public void setView(PMFView view) {
+		this.view = view;
+	}
+
+	/**
+	 * 
+	 * @param orderTemp
+	 */
+	public void changeOrderTemp(float orderTemp) {
+		this.getSerialConn().write(""+orderTemp);
 	}
 
 }

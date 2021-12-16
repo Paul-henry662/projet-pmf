@@ -30,8 +30,8 @@ public class PMFSerial {
 	 * 
 	 * @param temp
 	 */
-	public void write(float temp) {
-		//
+	public void write(String data) {
+		this.getPort().writeBytes(data.getBytes(), data.length());
 	}
 
 	public SerialPort getPort() {
@@ -57,5 +57,4 @@ public class PMFSerial {
 	public void setConnected(boolean connected) {
 		this.connected = connected;
 	}
-
 }
