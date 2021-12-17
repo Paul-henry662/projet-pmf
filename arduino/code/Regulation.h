@@ -1,11 +1,14 @@
-#define TRANSITOR_PIN 3
+#define PELTIER 3
 
 // Température de consigne
-float orderTemp = 17.0;
+float orderTemp = 35.0;
 // Ecart de température maximal avant l'état critique
 const float DELTA_CRITICAL = 3.0;
 // Ecart de température maximal pour la régulation
 const float DELTA_REG = 2.0;
+
+int power = 0;
+int peltierLevel = 0;
 
 // Modifier la température de consigne
 void setOrderTemp(float orderTemp);
@@ -14,14 +17,6 @@ bool isDewPossible(float internalTemp, float dewPoint);
 // Retourne vrai si le température est critique
 bool isTempCritical(float internalTemp);
 // Active / désactive le module à effet Peltier
-void regulate(float internalTemp){
-  if(internalTemp - orderTemp <= - DELTA_REG)
-    digitalWrite(TRANSITOR_PIN, LOW);
-  else if(internalTemp - orderTemp >= DELTA_REG)
-    digitalWrite(TRANSITOR_PIN, HIGH);
-  else
-    return;
-}
 
 // Implémentations
 void setOrderTemp(float newOrderTemp){
@@ -32,4 +27,16 @@ bool isDewPossible(float internalTemp, float dewPoint){
 }
 bool isTempCritical(float internalTemp){
   return (internalTemp - orderTemp  >= DELTA_CRITICAL)? true:false;
+}
+void regulate(float internalTemp){
+  float error = internalTemp - orderTemp;
+  power += 1 * error;
+
+  if(power > 99)
+    power = 99;
+  if(power < 0)
+    power = 0;
+
+  peltierLevel = map(power, 0, 99, 0, 255);
+  analogWrite(PELTIER, peltierLevel);
 }

@@ -17,7 +17,10 @@ public class PMFMain {
 		PMFController controller = new PMFController(view, model);
 		
 		controller.start();
-		controller.changeOrderTemp(16.6f);
+		
+		while(true) {
+			controller.changeOrderTemp(67f);
+		}
 	}
 
 }

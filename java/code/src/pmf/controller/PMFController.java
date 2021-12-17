@@ -3,8 +3,8 @@ package pmf.controller;
 
 import pmf.model.*;
 import pmf.view.*;
-
-public class PMFController {
+import java.awt.event.*;
+public class PMFController implements ActionListener{
 
 	private static String PORT_NAME = "COM4";
 
@@ -19,6 +19,7 @@ public class PMFController {
 	 */
 	public PMFController(PMFView view, PMFModel model) {
 		this.setView(view);
+		this.getView().setActionListener(this);
 		this.setModel(model);
 		this.setSerialConn(new PMFSerial(PORT_NAME));
 	}
@@ -73,6 +74,21 @@ public class PMFController {
 	}
 
 	public void update() {
+		System.out.println(this.getModel().getFridge());
+		
+		float internalTemp = this.getModel().getFridge().getInternalTemp();
+		float externalTemp = this.getModel().getFridge().getExternalTemp();
+		float ambiantHumidity = this.getModel().getFridge().getAmbiantHumidity();
+		
+		this.getView().updateValues(internalTemp, externalTemp, ambiantHumidity);
+		
+		if(this.getModel().getFridge().isDewPossible()) {
+			this.getView().displayAlert("Risque de condensation");
+		}
+		
+		if(this.getModel().getFridge().isTempCritical()) {
+			this.getView().displayAlert("La température est critique");
+		}
 	}
 
 	public PMFView getView() {
@@ -93,6 +109,19 @@ public class PMFController {
 	 */
 	public void changeOrderTemp(float orderTemp) {
 		this.getSerialConn().write(""+orderTemp);
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == this.getView().getFrame().getBtnOrderTemp()) {
+			float newOrderTemp = this.getView().getFrame().getSliderOrderTemp().getValue();
+			
+			this.getView().getFrame().getFieldOrderTemp().setText(newOrderTemp+"");
+			
+			this.changeOrderTemp(newOrderTemp);
+			this.getView().displayInfo("Température de consigne modifiée");
+		}
 	}
 
 }

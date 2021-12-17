@@ -6,8 +6,8 @@
 
 // Constantes de la diode
 // diodeVoltage = A * internalTemp + B
-const float A = -0.00165;
-const float B = 0.6;
+const float A = -0.00165 * 3.07;
+const float B = 0.6 * 3.07;
 
 // Constantes de la formule de Magnus
 const float ALPHA = 17.27;

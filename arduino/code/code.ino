@@ -12,6 +12,7 @@ bool tempCritical = false;
 
 void setup() {
   Serial.begin(9600);
+  pinMode(PELTIER, OUTPUT);
   dht.begin();
 }
 
@@ -35,19 +36,21 @@ void loop() {
     Serial.print(":");
     Serial.print(ambiantHumidity);
     Serial.print(":");
-    Serial.print(dewPoint);
+    Serial.print(dewPossible);
     Serial.print(":");
-    Serial.print((int) dewPossible);
-    Serial.print(":");
-    Serial.print((int) tempCritical);
+    Serial.print(tempCritical);
     Serial.print(";");
     Serial.print("\n");
   }
 
-  if(Serial.available() > 0){
-    float newOrderTemp = Serial.readString().toFloat();
+  /*if(Serial.available() > 0){
+    //Serial.println("available");
+    float newOrderTemp = Serial.parseFloat();
     setOrderTemp(newOrderTemp);
-  }
+    //Serial.print("nouvelle température:");
+    //Serial.print(newOrderTemp);
+    
+  }*/
 
   regulate(internalTemp);
   

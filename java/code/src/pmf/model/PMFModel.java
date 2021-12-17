@@ -48,14 +48,12 @@ public class PMFModel implements SerialPortMessageListener {
 		float ambiantHumidity = Float.valueOf(params[2]);
 		boolean dewPossible = Boolean.valueOf(params[3]);
 		boolean tempCritical = Boolean.valueOf(params[4]);
-		boolean running = Boolean.valueOf(params[5]);
 		
 		this.getFridge().setInternalTemp(internalTemp);
 		this.getFridge().setExternalTemp(externalTemp);
 		this.getFridge().setAmbiantHumidity(ambiantHumidity);
 		this.getFridge().setDewPossible(dewPossible);
 		this.getFridge().setTempCritical(tempCritical);
-		this.getFridge().setRunning(running);
 		
 		this.notifyObservers();
 	}

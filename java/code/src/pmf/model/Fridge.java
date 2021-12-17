@@ -95,7 +95,8 @@ public class Fridge {
 	public String toString() {
 		return "Temp. interne: " + this.getInternalTemp()
 				+"\nTemp. externe: " + this.getExternalTemp()
-				+"\nHumidité ambiante: " + this.getAmbiantHumidity();
+				+"\nHumidité ambiante: " + this.getAmbiantHumidity()
+				+"\nCondensation possible: " + this.isDewPossible();
 	}
 
 	@Override
